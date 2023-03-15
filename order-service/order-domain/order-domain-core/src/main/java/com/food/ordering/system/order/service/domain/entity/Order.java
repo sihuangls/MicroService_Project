@@ -206,7 +206,7 @@ public class Order extends AggregateRoot<OrderId> {
             return this;
         }
 
-        public Builder item(List<OrderItem> val) {
+        public Builder items(List<OrderItem> val) {
             items = val;
             return this;
         }
