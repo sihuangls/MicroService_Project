@@ -13,6 +13,9 @@ public class Product extends BaseEntity<Productid> {
         this.name = name;
         this.price = price;
     }
+    public Product(Productid productid){
+        super.setId(productid);
+    }
 
     public String getName() {
         return name;

@@ -66,6 +66,33 @@ public class OrderItem extends BaseEntity<OrderItemId> {
         public Builder() {
         }
 
+        public static Builder newBuilder(){return new Builder();}
+
+        public Builder setOrderItemId(OrderItemId orderItemId) {
+            this.orderItemId = orderItemId;
+            return this;
+        }
+
+        public Builder setSubTotal(Money subTotal) {
+            this.subTotal = subTotal;
+            return this;
+        }
+
+        public Builder setPrice(Money price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder setQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public Builder setProduct(Product product) {
+            this.product = product;
+            return this;
+        }
+
         public Builder orderItemId(OrderItemId val) {
             orderItemId = val;
             return this;
