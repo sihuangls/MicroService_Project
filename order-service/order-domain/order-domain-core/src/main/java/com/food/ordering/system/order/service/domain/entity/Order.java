@@ -43,7 +43,7 @@ public class Order extends AggregateRoot<OrderId> {
         orderStatus = orderStatus.PAID;
     }
 
-    public void approved(){
+    public void approve(){
         if(orderStatus != orderStatus.PAID){
             throw new OrderDomainException("Order is not in correct state for approved operation!");
         }
@@ -143,7 +143,7 @@ public class Order extends AggregateRoot<OrderId> {
         return deliveryAddress;
     }
 
-    public List<OrderItem> getItem() {
+    public List<OrderItem> getItems() {
         return items;
     }
 

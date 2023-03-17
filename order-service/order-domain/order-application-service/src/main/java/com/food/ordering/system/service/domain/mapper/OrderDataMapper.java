@@ -12,6 +12,7 @@ import com.food.ordering.system.order.service.domain.valueobject.StreetAddress;
 import com.food.ordering.system.service.domain.dto.create.CreateOrderCommand;
 import com.food.ordering.system.service.domain.dto.create.CreateOrderResponse;
 import com.food.ordering.system.service.domain.dto.create.OrderAddress;
+import com.food.ordering.system.service.domain.dto.track.TrackOrderResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class OrderDataMapper {
 
+    //mapper的作用就是将DTO转化成DAO，也就是前端的请求转化成后端的信息
     public Restaurant createOrderCommandToRestaurant(CreateOrderCommand createOrderCommand){
         //我们发现product并不一定需要名字和price，有时候只需要一个充满productId的restaurant
         //所以我们去Product中override一个新的
@@ -42,8 +44,7 @@ public class OrderDataMapper {
                 .items(orderItemsToOrderItemEntities(createOrderCommand.getItems()))
                 .build();
     }
-    //这个部分我们并不设置id，逻辑仅仅设置我们的item
-    //因为这个事customer会交予我们的信息
+
     private List<OrderItem> orderItemsToOrderItemEntities(List<com.food.ordering.system.service.domain.dto.create.OrderItem> orderItems) {
         return orderItems.stream()
                 .map(orderItem ->
@@ -65,10 +66,20 @@ public class OrderDataMapper {
     }
 
     //这里并不需要返回任何信息，只需要给予response
-    public CreateOrderResponse orderToCreateOrderResponse(Order order){
+    public CreateOrderResponse orderToCreateOrderResponse(Order order, String message){
         return CreateOrderResponse.builder()
                 .orderTrackingId(order.getTrackingId().getValue())
                 .orderStatus(order.getOrderStatus())
+                .message(message)
                 .build();
     }
+
+    public TrackOrderResponse orderToTrackOrderResponse(Order order){
+        return TrackOrderResponse.builder()
+                .orderTrackingId(order.getTrackingId().getValue())
+                .orderStatus(order.getOrderStatus())
+                .failureMessages(order.getFailureMessages())
+                .build();
+    }
+
 }
