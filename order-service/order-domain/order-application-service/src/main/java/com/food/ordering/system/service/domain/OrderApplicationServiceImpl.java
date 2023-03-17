@@ -1,4 +1,4 @@
-package com.food.ordering.system.service.domain.ports;
+package com.food.ordering.system.service.domain;
 
 
 import com.food.ordering.system.service.domain.dto.create.CreateOrderCommand;
