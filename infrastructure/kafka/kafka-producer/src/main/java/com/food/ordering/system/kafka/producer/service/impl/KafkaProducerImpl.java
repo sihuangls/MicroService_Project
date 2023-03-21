@@ -4,6 +4,7 @@ import com.food.ordering.system.kafka.producer.exception.KafkaProducerException;
 import com.food.ordering.system.kafka.producer.service.KafkaProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -13,6 +14,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import javax.annotation.PreDestroy;
 import java.io.Serializable;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Component
@@ -28,12 +30,28 @@ public class KafkaProducerImpl<K extends Serializable, V extends SpecificRecordB
     public void send(String topicName, K key, V message, ListenableFutureCallback<SendResult<K, V>> callback) {
         log.info("Sending message={} to topic={}", message, topicName);
         try {
-            ListenableFuture<SendResult<K, V>> kafkaResultFuture = kafkaTemplate.send(topicName, key, message);
-            kafkaResultFuture.addCallback(callback);
+            CompletableFuture<SendResult<K,V>> kafkaResultFuture = kafkaTemplate.send(topicName, key, message);
+            kafkaResultFuture.thenAccept(kvSendResult -> {
+                RecordMetadata metadata =kvSendResult.getRecordMetadata();
+                log.info("Received successful response from Kafka for" + " Topic: {} Partition: {} Offset: {} Timestamp: {}",
+                        metadata.topic(),
+                        metadata.partition(),
+                        metadata.offset(),
+                        metadata.timestamp());
+            }).exceptionally(throwable -> {log.error("Error while sending message {}", throwable);
+            return null;});
         } catch (KafkaException e) {
             log.error("Error on kafka producer with key: {}, message: {} and exception: {}", key, message,
                     e.getMessage());
             throw new KafkaProducerException("Error on kafka producer with key: " + key + " and message: " + message);
+        }
+    }
+
+    @PreDestroy
+    public void close(){
+        if(kafkaTemplate != null){
+            log.info("Closing kafka producer!");
+            kafkaTemplate.destroy();
         }
     }
 }
