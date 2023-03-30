@@ -1,0 +1,15 @@
+com\food\ordering\system\domain\event\DomainEvent.class
+com\food\ordering\system\domain\valueobject\OrderStatus.class
+com\food\ordering\system\domain\valueobject\Money.class
+com\food\ordering\system\domain\entity\AggregateRoot.class
+com\food\ordering\system\domain\exception\DomainException.class
+com\food\ordering\system\domain\valueobject\BaseId.class
+com\food\ordering\system\domain\Main.class
+com\food\ordering\system\domain\entity\BaseEntity.class
+com\food\ordering\system\domain\valueobject\CustomerId.class
+com\food\ordering\system\domain\valueobject\RestaurantId.class
+com\food\ordering\system\domain\valueobject\OrderAppovalStatus.class
+com\food\ordering\system\domain\valueobject\Productid.class
+com\food\ordering\system\domain\event\publisher\DomainEventPublisher.class
+com\food\ordering\system\domain\valueobject\PaymentStatus.class
+com\food\ordering\system\domain\valueobject\OrderId.class
